@@ -1,0 +1,109 @@
+<script>
+    /*
+    Принять от пользователя имена людей для набора в команду. Имена принять и сохранить в новом массиве. Количество имён должно соответсвовать количеству должностей. Массив с должностями - ['Junior developer', 'Middle developer', 'Senior developer', 'Junior QA', 'Middle QA', 'Senior QA', 'Project manager'].
+    Создать объект team в котором будут храниться новые объекты-сотрудники с параметрами name и position, данные для этих свойств добавляем из массивов.
+    Добавить сотрудникам зарплаты (свойство salary) при помощи метода Math.random(), который будет выдавать произвольное число в промежутке между N1 и N2 исходя из принципа:
+        если в должности есть слово "junior" сумма будет от 500 до 1000;
+        если в должности есть слово "middle" сумма будет от 1500 до 2000;
+        если в должности есть слово "senior" сумма будет от 2500 до 3000;
+        для всех остальных - от 4000 до 4500; Для определения того есть ли слово в имени должности используйте метод str.indexOf('часть строки для поиска'). Например:
+
+   var name = 'Junior developer';
+   name.indexOf('Junior'); 
+   //в данном случае вернет 0, если такая строка отсутсвует вернет -1. 
+   //Регистр имеет значение, по этому строка "junior" вернет -1
+
+    Добавить каждому сотруднику метод tellAboutYourSelf(), который будет сообщать информацию о пользователе (например "Меня зовут John и я - Project manager. Я зарабатываю 4863$.").
+    Добавить объекту team метод showTeam(), который будет выводить информацию о всех сотрудниках в консоль в формате: "John - Project manager. Зарплата - 4863$."*
+
+    Для удобства создайте по порядку все необходимые функции и в конце сделать вызов этих функций в логическом порядке. Например:
+
+    getNames();
+    createTeam();
+    setSalary();
+    создание цикла для установки метода tellAboutYourSelf();
+    создание team.showTeam = function() {...};
+    вызов метода showTeam();
+
+*/
+
+var position = ["Junior QA engineer", "Middle QA engineer", "Porduct owner", "Senior QA engineer", "Middle developer", "Project manager", "Senior developer", "Junior developer"];
+var names = [];
+
+for(var i=0;i<position.length;i++){
+    getNames(i+1);
+}
+let team = {
+    worker:[]
+};
+
+team.worker = createTeam();
+team.showTeam = function(){
+    for(let i=0;i<Object.keys(team.worker).length;i++){
+        team.worker[i].tellAboutYourSelf();
+    }
+}
+setSalary(team);
+
+team.showTeam();
+
+function getNames(n){
+    let value= prompt("enter "+n+" name:");
+
+    if(value !== undefined && value != null && isNaN(value) && value.length!=0){
+        names.push(value.charAt(0).toUpperCase() + value.slice(1));
+    }
+    else{
+        getNames(n);
+    }
+}
+
+function createTeam(){
+    let tmp = {};
+    for(var i=0;i<position.length;i++){
+    tmp[i]={
+        name : names[i],
+        position : position[i]
+    };
+}
+    return tmp;
+}
+
+function setSalary(obj){
+    for(let i=0;i<Object.keys(obj.worker).length;i++){
+        obj.worker[i].salary = generateSalary(obj.worker[i].position);
+        obj.worker[i].tellAboutYourSelf = function(){
+            console.log("Меня зовут "+obj.worker[i].name+" и я - "+obj.worker[i].position+". Я зарабатываю "+obj.worker[i].salary+"$.")
+         }
+
+    }
+}
+function generateSalary(tmp){
+    
+    let sal = 0;
+
+    switch(true) {
+        case tmp.indexOf('Junior') >= 0 :{
+            sal = Math.floor(Math.random() * (1000 - 500) + 500);
+            break;
+        }  
+
+        case tmp.indexOf('Middle') >= 0 :{
+            sal = Math.floor(Math.random() * (2000 - 1500) + 1500);
+            break;
+        }  
+
+        case tmp.indexOf('Senior') >= 0 :{
+            sal = Math.floor(Math.random() * (3000 - 2500) + 2500);
+            break;
+        }  
+
+        default: {
+            sal = Math.floor(Math.random() * (4500 - 4000) + 4000);
+            break;
+        }
+    }
+return sal;
+    
+}
+</script>
